@@ -1,33 +1,26 @@
 'use strict';
 
-require('dotenv').config();
-
 console.log('my app');
 const express = require('express');
-const mysql = require('mysql2');
-
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
-});
-
+const connection = require('./model/db.js');
 const app = express();
 
 app.use(express.static('public'));
 
-app.get('/animal', (req, res) => {
-    connection.query(
-        'SELECT * FROM animal',
-        (err, results, fields) => {
+app.get('/animal', async (req, res) => {
+    try {
+   const [results, fields] = await connection.query(
+        'SELECT * FROM animal');
             console.log(results);
             console.log(fields);
             res.json(results);
+    } catch(e) {
+        console.log(e);
+        res.send('db error:(');
+    }
 
-        }
-    );
-});
+        });
+
 
 
 app.get('/', (req, res) => {
