@@ -1,2 +1,2 @@
 # node2019
-Test node with npm to create an express server
+Test node and npm to create an express server
